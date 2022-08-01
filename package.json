@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "leaflet": "^1.8.0",
+    "sass": "^1.54.0",
     "vue": "^3.2.37"
   },
   "devDependencies": {
