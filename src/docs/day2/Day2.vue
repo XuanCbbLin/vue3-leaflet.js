@@ -5,7 +5,7 @@
 <script setup>
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 
 const mapContainer = ref(null);
 
@@ -49,17 +49,15 @@ onMounted(() => {
   // 加上openPopup()
   // marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 
-  var popup = L.popup();
+  // 地圖監聽事件
+  const popup = L.popup();
 
-  function onMapClick(e) {
-    console.log(e);
+  map.addEventListener("click", (e) => {
     popup
       .setLatLng(e.latlng)
       .setContent("You clicked the map at " + e.latlng.toString())
       .openOn(map);
-  }
-
-  map.on("click", onMapClick);
+  });
 });
 </script>
 
