@@ -102,7 +102,7 @@ openOn : 將訊息設定到地圖上
 
 這裡結合 L.popup()並且在地圖上監聽點擊事件，透過點擊顯示目前經緯度，點擊到的經緯度可在事件中的 latlng 取得
 
-![](https://i.imgur.com/SWpH1nk.png =728x200)
+![](https://i.imgur.com/SWpH1nk.png)
 
 ```javascript!
 
