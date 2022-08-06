@@ -11,12 +11,11 @@ const mapContainer = ref(null);
 
 onMounted(() => {
   const map = L.map(mapContainer.value, {
-    center: [51.505, -0.09],
-    zoom: 13,
+    center: [23.611, 120.768],
+    zoom: 8,
   });
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}", {
-    foo: "bar",
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
 });
@@ -24,6 +23,6 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .mapContainer {
-  height: 600px;
+  height: 100vh;
 }
 </style>
