@@ -64,8 +64,6 @@ const highlightFeature = (e) => {
   });
 
   layer.bringToFront();
-
-  info.update(layer.feature.properties);
 };
 
 const resetHighlight = (e) => {
@@ -84,8 +82,6 @@ onMounted(() => {
     style: style,
     onEachFeature: onEachFeature,
   }).addTo(map);
-
-  info.addTo(map);
 });
 </script>
 
