@@ -43,9 +43,9 @@ const style = (feature) => {
   };
 };
 
-function zoomToFeature(e) {
+const zoomToFeature = (e) => {
   map.fitBounds(e.target.getBounds());
-}
+};
 
 const onEachFeature = (feature, layer) => {
   layer.on("mouseover", highlightFeature);
