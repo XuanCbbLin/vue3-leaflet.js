@@ -3,7 +3,8 @@
   <!-- <Day2 /> -->
   <!-- <Day3 /> -->
   <!-- <Day4 /> -->
-  <Day5 />
+  <!-- <Day5 /> -->
+  <Day6 />
 </template>
 
 <script setup>
@@ -12,6 +13,7 @@ import Day2 from "./docs/day2/Day2.vue";
 import Day3 from "./docs/day3/Day3.vue";
 import Day4 from "./docs/day4/Day4.vue";
 import Day5 from "./docs/day5/Day5.vue";
+import Day6 from "./docs/day6/Day6.vue";
 </script>
 
 <style lang="scss" scoped></style>
