@@ -1,5 +1,19 @@
 <template>
-  <div class="mapContainer" ref="mapContainer"></div>
+  <div class="h-100vh" ref="mapContainer">
+    <div class="absolute right-0 top-0 z-500 w-52 p-3 bg-white text-xl">
+      <div>人口密度 : {{ areaDensity ? areaDensity : "" }}</div>
+      <div>區域 : {{ areaName ? areaName : "" }}</div>
+    </div>
+    <ul class="absolute right-[1.25rem] bottom-[1.875rem] z-500 bg-white p-4 text-lg">
+      <li v-for="(Density, index) in DensityList" :key="Density">
+        <span
+          class="inline-block w-4 h-4 mr-2"
+          :class="`bg-[${DensityList[index + 1] ? getColor(DensityList[index + 1]) : '#800026'}]`"
+        ></span>
+        {{ DensityList[index + 1] ? `${Density}-${DensityList[index + 1]}` : `${Density}+` }}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script setup>
@@ -9,11 +23,16 @@ import { onMounted, ref } from "vue";
 import { statesData } from "../day5/us-states";
 
 const mapContainer = ref(null);
+const areaDensity = ref("");
+const areaName = ref("");
+const DensityList = [0, 10, 20, 50, 100, 200, 500, 1000];
 let map = null;
 let geojson = null;
 
 // 依照人口密度大小取得顏色
 const getColor = (density) => {
+  console.log(density);
+
   return density > 1000
     ? "#800026"
     : density > 500
@@ -56,6 +75,9 @@ const onEachFeature = (feature, layer) => {
 const highlightFeature = (e) => {
   const layer = e.target;
 
+  areaDensity.value = layer.feature.properties.density;
+  areaName.value = layer.feature.properties.name;
+
   layer.setStyle({
     weight: 5,
     color: "#666",
@@ -68,6 +90,8 @@ const highlightFeature = (e) => {
 
 const resetHighlight = (e) => {
   geojson.resetStyle(e.target);
+  areaDensity.value = "";
+  areaName.value = "";
 };
 
 onMounted(() => {
@@ -85,8 +109,4 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-.mapContainer {
-  height: 100vh;
-}
-</style>
+<style lang="scss" scoped></style>
