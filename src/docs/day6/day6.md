@@ -210,3 +210,16 @@ onMounted(() => {
   L.control.layers(baseMaps, overlayMaps).addTo(map);
 });
 ```
+
+在底圖上切換 overlayMaps:
+
+目前沒有點擊 cities 所以地圖不會有圖標
+![](https://i.imgur.com/XlrUS0x.png)
+
+![](https://i.imgur.com/6CJAXJJ.png)
+
+點擊 cities 圖標跑出來
+
+![](https://i.imgur.com/i27INbh.png)
+
+![](https://i.imgur.com/hFK4mlG.png)
