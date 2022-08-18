@@ -19,19 +19,25 @@ const latLngBounds = L.latLngBounds([
 
 onMounted(() => {
   const map = L.map(mapContainer.value).setView([37.8, -96], 4);
-  const osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(map);
 
   const imageOverlay = L.imageOverlay(imageUrl, latLngBounds, {
-    opacity: 0.8,
+    opacity: 1,
     errorOverlayUrl: errorOverlayUrl,
     alt: altText,
-    interactive: true,
+    interactive: false,
   }).addTo(map);
 
-  L.rectangle(latLngBounds).addTo(map);
+  imageOverlay.on("click", (e) => {
+    imageOverlay.bindPopup("我是圖片");
+  });
+
+  console.log(map);
+
+  // L.rectangle(latLngBounds).addTo(map);
   map.fitBounds(latLngBounds);
 });
 </script>

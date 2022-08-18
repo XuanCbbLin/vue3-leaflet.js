@@ -1,6 +1,6 @@
 <template>
-  <!-- <ImageOverlay /> -->
-  <VideoOverlay />
+  <ImageOverlay />
+  <!-- <VideoOverlay /> -->
   <!-- <SVGOverlay /> -->
 </template>
 

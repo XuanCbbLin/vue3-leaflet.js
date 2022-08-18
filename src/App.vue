@@ -6,8 +6,8 @@
   <!-- <Day5 /> -->
   <!-- <Day51 /> -->
   <!-- <Day6 /> -->
-  <!-- <Day7 /> -->
-  <Day8 />
+  <Day7 />
+  <!-- <Day8 /> -->
 </template>
 
 <script setup>
