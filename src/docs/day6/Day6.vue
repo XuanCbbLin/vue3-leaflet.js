@@ -6,72 +6,87 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { onMounted, ref } from "vue";
+import { statesData } from "../day5/us-states";
 
 const mapContainer = ref(null);
-const markers = [
-  L.marker([39.61, -105.02]).bindPopup("This is Littleton, CO."),
-  L.marker([39.74, -104.99]).bindPopup("This is Denver, CO."),
-  L.marker([39.73, -104.8]).bindPopup("This is Aurora, CO."),
-  L.marker([39.77, -105.23]).bindPopup("This is Golden, CO."),
-];
+let map = null;
+let geojson = null;
 
-const cities = L.layerGroup([...markers]);
-const mbAttr =
-  'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
-const mbUrl =
-  "https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/9/106/193?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw";
-
-const streets = L.tileLayer(
-  "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
-  {
-    id: "mapbox/streets-v11",
-    tileSize: 512,
-    zoomOffset: -1,
-    attribution: mbAttr,
-  }
-);
-
-const osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 19,
-  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-});
-
-const baseMaps = {
-  OpenStreetMap: osm,
-  "Mapbox Streets": streets,
+// 依照人口密度大小取得顏色
+const getColor = (density) => {
+  return density > 1000
+    ? "#800026"
+    : density > 500
+    ? "#BD0026"
+    : density > 200
+    ? "#E31A1C"
+    : density > 100
+    ? "#FC4E2A"
+    : density > 50
+    ? "#FD8D3C"
+    : density > 20
+    ? "#FEB24C"
+    : density > 10
+    ? "#FED976"
+    : "#FFEDA0";
 };
 
-const overlayMaps = {
-  Cities: cities,
+// 設定每個區塊的樣式
+const style = (feature) => {
+  return {
+    fillColor: getColor(feature.properties.density),
+    weight: 2,
+    opacity: 1,
+    color: "white",
+    dashArray: "3",
+    fillOpacity: 0.7,
+  };
 };
 
-const crownHill = L.marker([39.75, -105.09]).bindPopup("This is Crown Hill Park.");
-const rubyHill = L.marker([39.68, -105.0]).bindPopup("This is Ruby Hill Park.");
+const zoomToFeature = (e) => {
+  map.fitBounds(e.target.getBounds());
+};
 
-const parks = L.layerGroup([crownHill, rubyHill]);
-const satellite = L.tileLayer(mbUrl, {
-  id: "MapID",
-  tileSize: 512,
-  zoomOffset: -1,
-  attribution: mbAttr,
-});
+const onEachFeature = (feature, layer) => {
+  layer.on("mouseover", highlightFeature);
+  layer.on("mouseout", resetHighlight);
+  layer.on("click", zoomToFeature);
+};
 
-onMounted(() => {
-  const map = L.map(mapContainer.value, {
-    center: [39.73, -104.99],
-    zoom: 10,
-    layers: [osm, cities],
+const highlightFeature = (e) => {
+  const layer = e.target;
+
+  layer.setStyle({
+    weight: 5,
+    color: "#666",
+    dashArray: "",
+    fillOpacity: 0.7,
   });
 
-  const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+  layer.bringToFront();
+};
 
-  layerControl.addBaseLayer(satellite, "Satellite");
-  layerControl.addOverlay(parks, "Parks");
+const resetHighlight = (e) => {
+  geojson.resetStyle(e.target);
+};
+
+onMounted(() => {
+  map = L.map(mapContainer.value).setView([37.8, -96], 4);
+
+  const tiles = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(map);
+
+  geojson = L.geoJson(statesData, {
+    style: style,
+    onEachFeature: onEachFeature,
+  }).addTo(map);
 });
 </script>
 
 <style lang="scss" scoped>
 .mapContainer {
-  height: 100vh;
+  height: 600px;
 }
 </style>

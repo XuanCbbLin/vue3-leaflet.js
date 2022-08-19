@@ -1,118 +1,129 @@
-###### tags: `鐵人賽`
+# 鐵人賽 Day2
 
-# Day ２
+# Leaflet.js 介紹和起手式
 
-# 地圖標記和事件
+## Leaflet.js 是什麼
 
-接下來要介紹地圖新增標記，如何在地圖上使用事件，以及標記上設定訊息框
+Leaflet 是一個開源的函式庫,能夠實現基本的地圖操作,建立圖層,標記,彈出窗口,縮放等操作
 
-## 標記
+## 怎麼導入 Leaflet.js
 
-### L.marker
-
-    L.marker(latlng, options)
-
-latlng: 設定圖標經緯度
-options : 設定圖標狀態
-例如: 圖標設定能拖曳，就在 options 新增 draggable: true 就可以拖曳圖標，draggable 預設為 false
+1. CDN 引入
 
 ```javascript!
-const marker = L.marker([23.465766, 120.448608], {
-    draggable: true,
-  }).addTo(map);
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
 
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin="">
+</script>
 ```
 
-### L.circle
+2. 直接下載再引入檔案
 
-    L.circle(latlng, options)
+   官網載點: https://leafletjs.com/download.html
 
-除了設定一般圖標外也可以在地圖新增圓形，參數設定方式也是跟 L.marker 一樣需要給經緯度和 options 設定圓形狀態
+   ![](https://i.imgur.com/u3aio4O.png)
+
+   下載後解壓縮將檔案引入
+
+   ```javascript!
+   <link rel="stylesheet" href="/path/to/leaflet.css" />
+   <script src="/path/to/leaflet.js"></script>
+   ```
+
+3. 下載至 package.json
+
+   在專案終端機執行 npm install leaflet
+
+   這時候看 package.json 的 dependencies 就能看到目前安裝的版本
+
+   ```javascript!
+   "dependencies": {
+       "leaflet": "^1.8.0",
+   },
+   ```
+
+## 開始使用
+
+因為我是用 npm install 的方式所以使用 import 將 leaflet 引入
 
 ```javascript!
-
- const circle = L.circle([23.438049, 121.184692], {
-    color: "blue",
-    fillColor: "green",
-    fillOpacity: 1,
-    radius: 12000,
-  }).addTo(map);
-
+<script setup>
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+</script>
 ```
 
-color : 圓形錨邊顏色
-fillColor : 圓形填充色
-fillOpacity : 填充色透明度
-radius : 圓形半徑
+產生地圖:
+建立地圖區塊,用 ref 獲取節點
 
-### L.polygon
-
-    L.polygon(latlngs, options)
-
-latlngs : 設定多個經緯度組成多邊形
-options :　設定多邊形狀態
-
-在地圖上顯示多邊形，這裡畫一個正方形
-
-```javascript!
-
-  const polygon = L.polygon(
-    [
-      [22.687518, 121.449051],
-      [22.687518, 121.558914],
-      [22.585485, 121.558914],
-      [22.585485, 121.449051],
-    ],
-    {
-      color: "#873324",
-    }
-  ).addTo(map);
-
+```htmlmixed!
+<template>
+  <div class="mapContainer" ref="mapContainer"></div>
+</template>
 ```
 
-### 圖標上添加訊息
-
-1. 直接在圖標上使用 bindPopup()設定要顯示的內容
-
 ```javascript!
+<script setup>
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { ref } from "vue";
 
-marker.bindPopup("<b>Hello world!</b><br>I am a marker.").openPopup();
-circle.bindPopup("<b>Hello world!</b><br>I am a circle.");
-
+const mapContainer = ref(null);
+</script>
 ```
 
-如果圖標一開始就想要有訊息，設定 bindPopup()後在接上 openPopup()預設就會先顯示訊息，沒有加 openPopup() 就是點擊後會出現訊息
-
-2. 除了在圖標上顯示訊息，也可以在自己設定的經緯度顯示訊息
+在 Vue onMounted 階段建立地圖物件
 
 ```javascript!
-
-const popup = L.popup()
-    .setLatLng([23.800424, 121.1187742])
-    .setContent("I am a standalone popup.")
-    .openOn(map);
-
-```
-
-setLatLng : 設定經緯度
-setContent : 設定內容
-openOn : 將訊息設定到地圖上
-
-## 地圖監聽事件
-
-這裡結合 L.popup()並且在地圖上監聽點擊事件，透過點擊顯示目前經緯度，點擊到的經緯度可在事件中的 latlng 取得
-
-![](https://i.imgur.com/SWpH1nk.png)
-
-```javascript!
-
-const popup = L.popup();
-
-map.on("click", (e) => {
-    popup
-      .setLatLng(e.latlng)
-      .setContent("You clicked the map at " + e.latlng.toString())
-      .openOn(map);
+onMounted(() => {
+  const map = L.map(mapContainer.value, {
+    center: [23.611, 120.768],
+    zoom: 8,
   });
 
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+});
+
 ```
+
+### L.map 初始化地圖設定:
+
+    L.map(<String> id | <HTMLElement> el , options)
+
+L.map 第 1 個參數能接收 ID 選取器或 DOM, 第 2 個參數 options 用物件設定需要的屬性,以上面為例
+
+```javascript!
+{
+    L.map(mapContainer.value, {
+    center: [23.611, 120.768],
+    zoom: 8,
+  })
+}
+```
+
+第二個參數 options
+
+center : 設定地圖經緯度
+zoom : 設定地圖縮放層級
+
+### L.tileLayer 設定圖資:
+
+這裡我使用官方範例 openstreetmap 建立圖資
+
+    L.tilelayer(<String> urlTemplate, <TileLayer options> options?)
+
+```javascript!
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+
+```
+
+urlTemplate : 圖資請求設定
+attribution : 圖資版權設定
+
+設定圖資後使用 addTo()進入 map 物件

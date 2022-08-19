@@ -6,82 +6,74 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { onMounted, ref } from "vue";
-import { statesData } from "../day5/us-states";
+import {
+  geojsonFeature,
+  myLines,
+  myStyle,
+  states,
+  someGeojsonFeature,
+  geojsonMarkerOptions,
+  geojsonFeatureForEachFeature,
+  onEachFeature,
+  someFeatures,
+} from "./day5";
 
 const mapContainer = ref(null);
-let map = null;
-let geojson = null;
-
-// 依照人口密度大小取得顏色
-const getColor = (density) => {
-  return density > 1000
-    ? "#800026"
-    : density > 500
-    ? "#BD0026"
-    : density > 200
-    ? "#E31A1C"
-    : density > 100
-    ? "#FC4E2A"
-    : density > 50
-    ? "#FD8D3C"
-    : density > 20
-    ? "#FEB24C"
-    : density > 10
-    ? "#FED976"
-    : "#FFEDA0";
-};
-
-// 設定每個區塊的樣式
-const style = (feature) => {
-  return {
-    fillColor: getColor(feature.properties.density),
-    weight: 2,
-    opacity: 1,
-    color: "white",
-    dashArray: "3",
-    fillOpacity: 0.7,
-  };
-};
-
-const zoomToFeature = (e) => {
-  map.fitBounds(e.target.getBounds());
-};
-
-const onEachFeature = (feature, layer) => {
-  layer.on("mouseover", highlightFeature);
-  layer.on("mouseout", resetHighlight);
-  layer.on("click", zoomToFeature);
-};
-
-const highlightFeature = (e) => {
-  const layer = e.target;
-
-  layer.setStyle({
-    weight: 5,
-    color: "#666",
-    dashArray: "",
-    fillOpacity: 0.7,
-  });
-
-  layer.bringToFront();
-};
-
-const resetHighlight = (e) => {
-  geojson.resetStyle(e.target);
-};
 
 onMounted(() => {
-  map = L.map(mapContainer.value).setView([37.8, -96], 4);
+  const map = L.map(mapContainer.value).setView([39.74739, -105], 13);
 
-  const tiles = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(map);
 
-  geojson = L.geoJson(statesData, {
-    style: style,
-    onEachFeature: onEachFeature,
+  // 新增一個點座標
+  // L.geoJSON(geojsonFeature).addTo(map);
+  // or;
+  // const myLayer = L.geoJSON().addTo(map);
+  // myLayer.addData(geojsonFeature);
+
+  // options
+  // 設定style
+  // L.geoJSON(myLines, {
+  //   style: myStyle,
+  // }).addTo(map);
+
+  // options
+  // 設定style 傳入函示方式
+  // L.geoJSON(states, {
+  //   style: function (feature) {
+  //     console.log(feature);
+  //     switch (feature.properties.party) {
+  //       case "Republican":
+  //         return { color: "#ff0000" };
+  //       case "Democrat":
+  //         return { color: "#0000ff" };
+  //     }
+  //   },
+  // }).addTo(map);
+
+  // pointToLayer
+  // L.geoJSON(someGeojsonFeature, {
+  //   pointToLayer: function (feature, latlng) {
+  //     return L.circleMarker(latlng, geojsonMarkerOptions);
+  //   },
+  // }).addTo(map);
+
+  // L.geoJSON(geojsonFeatureForEachFeature, {
+  //   onEachFeature: onEachFeature,
+  // }).addTo(map);
+
+  //filter
+  L.geoJSON(someFeatures, {
+    filter: function (feature, layer) {
+      return feature.properties.show_on_map;
+    },
   }).addTo(map);
+
+  map.on("click", (e) => {
+    console.log(e.latlng);
+  });
 });
 </script>
 

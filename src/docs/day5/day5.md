@@ -1,177 +1,390 @@
 ###### tags: `鐵人賽`
 
-# Day5
+# day5
 
-# GeoJSON 互動式地圖
+# GeoJSON 使用方式
 
-本篇使用 leaflet 官方提供的範例完成人口密度地圖,使用已準備好的 GeoJSON 資料產生多邊形，並且摸到該區塊加入樣式
+本篇要來介紹如何將 GeoJSON 的資料顯示在地圖上
 
-範例網址: https://leafletjs.com/examples/choropleth/
+GeoJSON 的參數
 
-主要功能如下:
+    L.geoJSON(geojson, options)
 
-1. 滑鼠摸到地圖區域的邊框變色
-2. 滑鼠離開地圖，區域的邊框樣式重置
+## L.geoJSON 的 geojson 參數
 
-GeoJSON 資料:
+先建立 geojson 的資料，這裡的要在地圖上建立 1 個點座標
 
-使用官方提供的 js 檔案 https://leafletjs.com/examples/choropleth/us-states.js
-
-在 index.html 引入 GeoJSON
-
-```htmlmixed!
-  <body>
-    <script src="https://leafletjs.com/examples/choropleth/us-states.js"></script>
-  </body>
+```javascript!
+export const geojsonFeature = {
+  type: "Feature",
+  geometry: {
+    type: "Point",
+    coordinates: [-104.96749877929689, 39.73887436009367],
+  },
+};
 ```
 
-## 設定地圖區塊樣式
-
-將 GeoJSON 資料載入地圖
+在 onMounted 階段將 geojson 加到地圖上
 
 ```javascript!
 <script setup>
-let map = {};
+import { geojsonFeature } from "./feature.js";
 
 onMounted(() => {
-  map = L.map(mapContainer.value).setView([37.8, -96], 4);
+    L.geoJSON(geojsonFeature).addTo(map);
+})
+</script>
+```
 
-  const tiles = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution: '&copy; <a      href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+或者先建立空的 geoJSON 後續再填加資料
+
+```javascript!
+
+onMounted(() => {
+   const myLayer = L.geoJSON().addTo(map);
+   myLayer.addData(geojsonFeature);
+})
+
+```
+
+地圖上顯示一個點:
+![](https://i.imgur.com/gS0KHUO.png)
+
+## L.geoJSON 的 options 參數
+
+### options 裡給特徵設定樣式
+
+在 geoJSON 建立線段，在 L.geoJSON 使用 style 設定線段樣式
+
+1. 建立線段
+
+```javascript!
+export const myLines = [
+  // 第一條線
+  {
+    type: "LineString",
+    coordinates: [
+      [-105.02500534057619, 39.73979836621592],
+      [-105.01058578491212, 39.739666366099804],
+    ],
+  },
+  // 第二條線
+  {
+    type: "LineString",
+    coordinates: [
+      [-105.01058578491212, 39.739666366099804],
+      [-105.00251770019533, 39.7489057636298],
+    ],
+  },
+];
+```
+
+2. 設定線段樣式
+
+```javascript!
+export const myStyle = {
+  color: "red",
+  weight: 5,
+  opacity: 0.65,
+};
+```
+
+color: 設定線段紅色
+weight: 設定線的寬度
+opacity: 設定線的透明度
+
+3. 使用 L.geoJSON 時將資料和樣式帶入
+
+```javascript!
+
+<script setup>
+import { myLines , myStyle } from "./feature.js";
+
+onMounted(() => {
+   L.geoJSON(myLines, {
+    style: myStyle,
   }).addTo(map);
 
-  geojson = L.geoJson(statesData).addTo(map);
-});
-
+})
 </script>
 
 ```
 
-初始地圖狀態:
-![](https://i.imgur.com/VNkNgYY.png)
-多邊形區域的樣式是 leaflet 的預設
+地圖顯示:
+![](https://i.imgur.com/Sis4AAU.png)
 
-將地圖區塊樣式客製化:
-因為要顯示各區域的人口密度，所以每個區域依照密度設定樣式
+除了設定共用樣式資料，也可以傳遞函式客制樣式
 
-設定依照人口密度獲取樣式的函式
+這裡建立 2 個多邊形並且設定不同樣式
+
+1. 多邊形特徵
 
 ```javascript!
 
-<script setup>
-const getColor = (density) => {
-  return density > 1000
-    ? "#800026"
-    : density > 500
-    ? "#BD0026"
-    : density > 200
-    ? "#E31A1C"
-    : density > 100
-    ? "#FC4E2A"
-    : density > 50
-    ? "#FD8D3C"
-    : density > 20
-    ? "#FEB24C"
-    : density > 10
-    ? "#FED976"
-    : "#FFEDA0";
-};
-<script>
+export const polygons  = [
+  {
+    type: "Feature",
+    properties: { party: "Republican" },
+    geometry: {
+      type: "Polygon",
+      coordinates: [
+        [
+          [-105.05281448364259, 39.750093596284245],
+          [-105.03341674804689, 39.74956567318853],
+          [-105.03393173217775, 39.732669998150385],
+          [-105.05195617675783, 39.73689430525781],
+          [-105.05281448364259, 39.750093596284245],
+        ],
+      ],
+    },
+  },
+  {
+    type: "Feature",
+    properties: { party: "Democrat" },
+    geometry: {
+      type: "Polygon",
+      coordinates: [
+        [
+          [-104.97024536132814, 39.749169728211825],
+          [-104.95153427124025, 39.74930171012357],
+          [-104.95256423950197, 39.732669998150385],
+          [-104.9711036682129, 39.732669998150385],
+          [-104.97024536132814, 39.749169728211825],
+        ],
+      ],
+    },
+  },
+];
 
 ```
 
-L.geoJson 使用 style 獲取客制樣式
+2. L.geoJSON 的 style 設定篩選樣式函式
+
+多邊形分別設定紅色和藍色
 
 ```javascript!
 <script setup>
-
-const getStyle = (feature) => {
-  return {
-    fillColor: getColor(feature.properties.density),
-    weight: 2,
-    opacity: 1,
-    color: "white",
-    dashArray: "3",
-    fillOpacity: 0.7,
-  };
-};
+import { polygons } from "./feature.js";
 
 onMounted(() => {
-  L.geoJson(statesData, {
-    style: getStyle,
+
+  L.geoJSON(polygons, {
+    style: function (feature) {
+      switch (feature.properties.party) {
+        case "Republican":
+          return { color: "#ff0000" };
+        case "Democrat":
+          return { color: "#0000ff" };
+      }
+    },
   }).addTo(map);
-});
 
-<script>
+})
+</script>
+
 ```
 
-地圖每個區塊的人口密度樣式:
-![](https://i.imgur.com/egR7xlE.png)
+地圖顯示:
+![](https://i.imgur.com/bxR0s6e.png)
 
-設定區塊摸到時變色，L.geoJson 裡設定 onEachFeature ，接收 onEachFeature 函式監聽 mouseover 事件。
+### options 裡設定 pointToLayer
 
-- setStyle : 可以設定 geojson 圖層區塊的樣式
-- bringToFront() : 將圖層拉到頂端
+geoJSON 圖層也可以設定 circleMarker 和 Marker，不過設定方式需要透過 pointToLayer 的方式
 
-如果沒有設定 bringToFront()，摸到區塊時該區塊圖層樣式就看不到
-![](https://i.imgur.com/ZGUHGsU.png)
+1. 建立 2 個 point 資料
 
-設定 bringToFront()就可以看到圖層的樣式
-![](https://i.imgur.com/obyilFh.png)
+```javascript!
+export const points = [
+  {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [-104.99404, 39.75621],
+    },
+  },
+  {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [-104.98404, 39.74621],
+    },
+  },
+];
+```
+
+2. 設定 marker 樣式
+
+```javascript!
+
+export const markerStyle = {
+  radius: 8,
+  fillColor: "#ff7800",
+  color: "#000",
+  weight: 1,
+  opacity: 1,
+  fillOpacity: 0.8,
+};
+
+```
+
+3. 在 L.geoJSON 使用 pointToLayer 設定 marker 和樣式
+
+```javascript!
+
+<script setup>
+import { points , markerStyle } from "./feature.js";
+
+onMounted(() => {
+    L.geoJSON(points, {
+    pointToLayer: function (feature, latlng) {
+      return L.circleMarker(latlng, markerStyle);
+    },
+  }).addTo(map);
+})
+</script>
+
+```
+
+- 函式接收的參數
+
+  ```javascript!
+      function (feature, latlng){}
+  ```
+
+  - feature : 2 筆點資料
+  - latlng : 2 筆點座標
+
+- L.circleMarker 參數
+
+  `L.circleMarker(latlng, markerStyle)`
+
+  - latlng : 座標
+  - markerStyle : marker 樣式
+
+地圖顯示 2 個橘色 marker:
+
+![](https://i.imgur.com/Ujb9SZE.png)
+
+### options 裡設定 onEachFeature
+
+如果需要將資料設定到 geoJSON 圖層時，點擊資料顯示訊息就可以用 onEachFeature 方式處理
+
+1. 準備 1 個點座標
+
+properties: 設定要顯示的訊息
+
+```javascript!
+export const point = {
+  type: "Feature",
+  properties: {
+    name: "Coors Field",
+    amenity: "Baseball Stadium",
+    popupContent: "This is where the Rockies play!",
+  },
+  geometry: {
+    type: "Point",
+    coordinates: [-104.96749877929689, 39.73887436009367],
+  },
+};
+```
+
+2. 設定 onEachFeature 接收顯示訊息的函式
+
+```javascript!
+export const onEachFeature = (feature, layer) => {
+    layer.bindPopup(feature.properties.popupContent);
+};
+```
+
+feature : 設定的特徵資料
+
+```javascript!
+ properties: {
+    name: "Coors Field",
+    amenity: "Baseball Stadium",
+    popupContent: "This is where the Rockies play!",
+  },
+  geometry: {
+    type: "Point",
+    coordinates: [-104.96749877929689, 39.73887436009367],
+  },
+```
+
+layer : 將設定的資料顯示到特徵上
+例如顯示訊息 popupContent: "This is where the Rockies play!"
+
+3. 將函式設定到 onEachFeature
 
 ```javascript!
 <script setup>
-
-const highlightColor = (e) => {
-  const layer = e.target;
-
-  layer.setStyle({
-    weight: 5,
-    color: "#666",
-    dashArray: "",
-    fillOpacity: 0.7,
-  });
-
-  layer.bringToFront();
-};
-
-const onEachFeature = (feature, layer) => {
-  layer.on("mouseover", highlightColor);
-};
-
+import { point , onEachFeature  } from "./feature.js";
 
 onMounted(() => {
- L.geoJson(statesData, {
+    L.geoJSON(point, {
     onEachFeature: onEachFeature,
   }).addTo(map);
-
-});
-
-<script>
+})
+</script>
 ```
 
-滑鼠離開地圖，區域的邊框樣式重置:
-也是設定 onEachFeature 監聽 mouseout 事件， 觸發 mouseout 事件時將前一個區域的樣式移除
+地圖點擊就會顯示"This is where the Rockies play!"
+
+![](https://i.imgur.com/Fi72PKn.png)
+
+### options 裡設定 filter
+
+使用 filter 可以在 geoJSON 層控制需要顯示的特徵
+
+1. 設定 2 筆資料，並且在資料設定設定 true 或 false
+
+```javascript!
+export const someFeatures = [
+  {
+    type: "Feature",
+    properties: {
+      name: "Coors Field",
+      show_on_map: true,
+    },
+    geometry: {
+      type: "Point",
+      coordinates: [-104.99404, 39.75621],
+    },
+  },
+  {
+    type: "Feature",
+    properties: {
+      name: "Busch Field",
+      show_on_map: false,
+    },
+    geometry: {
+      type: "Point",
+      coordinates: [-104.98404, 39.74621],
+    },
+  },
+];
+
+```
+
+2. L.geoJSON 設定 filter 篩選資料
+   透過特徵中的 show_on_map 控制顯示的資料
 
 ```javascript!
 <script setup>
-
-const resetHighlight = (e) => {
-  geojson.resetStyle(e.target);
-};
-
-const onEachFeature = (feature, layer) => {
-   layer.on("mouseout", resetHighlight);
-};
-
+import { someFeatures } from "./feature.js";
 
 onMounted(() => {
- L.geoJson(statesData, {
-    onEachFeature: onEachFeature,
+    L.geoJSON(someFeatures, {
+    filter: function (feature, layer) {
+      return feature.properties.show_on_map;
+    },
   }).addTo(map);
-
-});
-
-<script>
+})
+</script>
 ```
+
+預設地圖上應該要顯示兩筆資料
+![](https://i.imgur.com/fqA8NSI.png)
+
+加入 filter 後只會顯示一筆
+
+![](https://i.imgur.com/ANAee4s.png)

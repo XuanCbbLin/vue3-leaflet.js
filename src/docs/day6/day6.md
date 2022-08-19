@@ -1,225 +1,177 @@
 ###### tags: `鐵人賽`
 
-# day6
+# Day6
 
-文檔:https://leafletjs.com/examples/layers-control/
+# GeoJSON 互動式地圖
 
-# 切換圖層和組合圖層資料
+本篇使用 leaflet 官方提供的範例完成人口密度地圖,使用已準備好的 GeoJSON 資料產生多邊形，並且摸到該區塊加入樣式
 
-之前都是在地圖上切換單一圖層，今天要來學習怎麼在地圖上切換不同圖層
+範例網址: https://leafletjs.com/examples/choropleth/
 
-## 透過 L.layerGroup() 組合圖層資料
+主要功能如下:
 
-之前地圖上如果需要添加不同的 marker，可能需要以下方式建立
+1. 滑鼠摸到地圖區域的邊框變色
+2. 滑鼠離開地圖，區域的邊框樣式重置
 
-我先建立 4 個圖標並且加在地圖上
+GeoJSON 資料:
+
+使用官方提供的 js 檔案 https://leafletjs.com/examples/choropleth/us-states.js
+
+在 index.html 引入 GeoJSON
+
+```htmlmixed!
+  <body>
+    <script src="https://leafletjs.com/examples/choropleth/us-states.js"></script>
+  </body>
+```
+
+## 設定地圖區塊樣式
+
+將 GeoJSON 資料載入地圖
+
+```javascript!
+<script setup>
+let map = {};
+
+onMounted(() => {
+  map = L.map(mapContainer.value).setView([37.8, -96], 4);
+
+  const tiles = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '&copy; <a      href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(map);
+
+  geojson = L.geoJson(statesData).addTo(map);
+});
+
+</script>
+
+```
+
+初始地圖狀態:
+![](https://i.imgur.com/VNkNgYY.png)
+多邊形區域的樣式是 leaflet 的預設
+
+將地圖區塊樣式客製化:
+因為要顯示各區域的人口密度，所以每個區域依照密度設定樣式
+
+設定依照人口密度獲取樣式的函式
 
 ```javascript!
 
 <script setup>
+const getColor = (density) => {
+  return density > 1000
+    ? "#800026"
+    : density > 500
+    ? "#BD0026"
+    : density > 200
+    ? "#E31A1C"
+    : density > 100
+    ? "#FC4E2A"
+    : density > 50
+    ? "#FD8D3C"
+    : density > 20
+    ? "#FEB24C"
+    : density > 10
+    ? "#FED976"
+    : "#FFEDA0";
+};
+<script>
+
+```
+
+L.geoJson 使用 style 獲取客制樣式
+
+```javascript!
+<script setup>
+
+const getStyle = (feature) => {
+  return {
+    fillColor: getColor(feature.properties.density),
+    weight: 2,
+    opacity: 1,
+    color: "white",
+    dashArray: "3",
+    fillOpacity: 0.7,
+  };
+};
 
 onMounted(() => {
+  L.geoJson(statesData, {
+    style: getStyle,
+  }).addTo(map);
+});
 
-  L.marker([39.61, -105.02]).bindPopup("This is Littleton, CO.").addTo(map);
-  L.marker([39.74, -104.99]).bindPopup("This is Denver, CO.").addTo(map);
-  L.marker([39.73, -104.8]).bindPopup("This is Aurora, CO.").addTo(map);
-  L.marker([39.77, -105.23]).bindPopup("This is Golden, CO.").addTo(map);
+<script>
+```
+
+地圖每個區塊的人口密度樣式:
+![](https://i.imgur.com/egR7xlE.png)
+
+設定區塊摸到時變色，L.geoJson 裡設定 onEachFeature ，接收 onEachFeature 函式監聽 mouseover 事件。
+
+- setStyle : 可以設定 geojson 圖層區塊的樣式
+- bringToFront() : 將圖層拉到頂端
+
+如果沒有設定 bringToFront()，摸到區塊時該區塊圖層樣式就看不到
+![](https://i.imgur.com/ZGUHGsU.png)
+
+設定 bringToFront()就可以看到圖層的樣式
+![](https://i.imgur.com/obyilFh.png)
+
+```javascript!
+<script setup>
+
+const highlightColor = (e) => {
+  const layer = e.target;
+
+  layer.setStyle({
+    weight: 5,
+    color: "#666",
+    dashArray: "",
+    fillOpacity: 0.7,
+  });
+
+  layer.bringToFront();
+};
+
+const onEachFeature = (feature, layer) => {
+  layer.on("mouseover", highlightColor);
+};
+
+
+onMounted(() => {
+ L.geoJson(statesData, {
+    onEachFeature: onEachFeature,
+  }).addTo(map);
 
 });
 
 <script>
 ```
 
-像上面程式碼需要一個一個將標記加到地圖上很麻煩 leaflet 提供 L.layerGroup()的方式將標記放到陣列裡，之後再將標記添加到地圖上。
-
-### L.layerGroup() 參數介紹
-
-    L.layerGroup(<Layer[]> layers?, <Object> options?)
-
-而 layers 就是需要添加的資料以陣列表示，如下:
-
-一樣創造標記然後用陣列裝起來
+滑鼠離開地圖，區域的邊框樣式重置:
+也是設定 onEachFeature 監聽 mouseout 事件， 觸發 mouseout 事件時將前一個區域的樣式移除
 
 ```javascript!
+<script setup>
 
-const markers = [
-  L.marker([39.61, -105.02]).bindPopup("This is Littleton, CO."),
-  L.marker([39.74, -104.99]).bindPopup("This is Denver, CO."),
-  L.marker([39.73, -104.8]).bindPopup("This is Aurora, CO."),
-  L.marker([39.77, -105.23]).bindPopup("This is Golden, CO."),
-];
+const resetHighlight = (e) => {
+  geojson.resetStyle(e.target);
+};
 
-```
+const onEachFeature = (feature, layer) => {
+   layer.on("mouseout", resetHighlight);
+};
 
-宣告 cities 將 markers 裝在 L.layerGroup
 
-```javascript!
-const cities = L.layerGroup(markers);
-```
-
-最後在 onMounted 階段將 cities 添加到地圖上
-
-```javascript!
 onMounted(() => {
-
-    const map = L.map(mapContainer.value, {
-    center: [39.73, -104.99],
-    zoom: 10,
-  });
-
-  const tiles = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+ L.geoJson(statesData, {
+    onEachFeature: onEachFeature,
   }).addTo(map);
 
-  cities.addTo(map);
-
-});
-```
-
-## 切換圖層
-
-這裡要介紹如何在地圖上切換不同圖層
-
-1. 建立第一個圖層
-
-建立圖資
-
-```javascript!
-const osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 19,
-  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 });
 
+<script>
 ```
-
-透過 L.map 中 options 的 layers 載入圖資
-
-```javascript!
-
-onMounted(() => {
-  const map = L.map(mapContainer.value, {
-    center: [39.73, -104.99],
-    zoom: 10,
-    layers: [osm],
-  });
-
-});
-
-```
-
-第一次建立的圖層:
-![](https://i.imgur.com/2hyZd0W.png)
-
-2. 新增第 2 個圖層
-
-mbAttr: 存放授權的資料
-
-```javascript!
-
-const mbAttr =
-  'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
-
-const streets = L.tileLayer(
-  "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
-  {
-    id: "mapbox/streets-v11",
-    attribution: mbAttr,
-  }
-);
-
-```
-
-地圖上要顯示的第 2 個圖層:
-![](https://i.imgur.com/Qzfxt07.png)
-
-3. 將前兩項建立的圖層切換
-   將兩個圖層 osm 和 streets 裝在建立的 baseMaps 物件中
-
-```javascript!
-const baseMaps = {
-  OpenStreetMap: osm,
-  MapBoxStreets: streets,
-};
-```
-
-在 onMounted 階段建立圖層並且能切換，使用 L.control.layers 建立 2 個圖層的控制選項:
-
-    L.control.layers(baseLayers, overlays)
-
-baseLayers : 圖層上的底圖，也就是 baseMaps 裡的 2 個圖層
-overlays : 底圖上的圖層
-
-```javascript!
-onMounted(() => {
-  const map = L.map(mapContainer.value, {
-    center: [39.73, -104.99],
-    zoom: 10,
-    layers: [osm],
-  });
-
- L.control.layers(baseMaps).addTo(map);
-});
-```
-
-這樣就可以切換圖層:
-圖層目前在 OpenStreetMap 這個選項
-
-![](https://i.imgur.com/L6WCGn5.png)
-
-![](https://i.imgur.com/hhw2eaH.png)
-
-切換至 MapBoxStreets
-
-![](https://i.imgur.com/4OAiloi.png)
-
-![](https://i.imgur.com/3XrD9u3.png)
-
-4. 在底圖上面新增另一個圖層
-   這部份接著第 3 點使用 L.control.layers 新增 overlays
-
-建立 markers 當作 overlays
-
-```javascript!
-const markers = [
-  L.marker([39.61, -105.02]).bindPopup("This is Littleton, CO."),
-  L.marker([39.74, -104.99]).bindPopup("This is Denver, CO."),
-  L.marker([39.73, -104.8]).bindPopup("This is Aurora, CO."),
-  L.marker([39.77, -105.23]).bindPopup("This is Golden, CO."),
-];
-
-const cities = L.layerGroup([markers]);
-```
-
-建立 overlayMaps 物件裝剛剛建立的 cities
-
-```javascript!
-const overlayMaps = { cities };
-```
-
-onMounted 階段的 L.control.layers 多新增一個 overlayMaps
-
-```javascript!
-onMounted(() => {
-  const map = L.map(mapContainer.value, {
-    center: [39.73, -104.99],
-    zoom: 10,
-    layers: [osm],
-  });
-
-  L.control.layers(baseMaps, overlayMaps).addTo(map);
-});
-```
-
-在底圖上切換 overlayMaps:
-
-目前沒有點擊 cities 所以地圖不會有圖標
-![](https://i.imgur.com/XlrUS0x.png)
-
-![](https://i.imgur.com/6CJAXJJ.png)
-
-點擊 cities 圖標跑出來
-
-![](https://i.imgur.com/i27INbh.png)
-
-![](https://i.imgur.com/hFK4mlG.png)

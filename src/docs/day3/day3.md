@@ -2,142 +2,117 @@
 
 # Day3
 
-# 客制化圖標和 GeoJSON 介紹
+# 地圖標記和事件
 
-除了可以用 L.marker()或 L.circle()等方式建立基本圖標，也可以用 L.icon()客製圖標
+接下來要介紹地圖新增標記，如何在地圖上使用事件，以及標記上設定訊息框
 
-## L.icon()
+## 標記
 
-    L.icon(options)
+### L.marker
 
-先準備需要用到的圖標，這裡我先用官方的圖標
-顯示的圖標: ![](https://i.imgur.com/rlkW5RN.png)
-陰影圖標 : ![](https://i.imgur.com/uJxxlqr.png)
+    L.marker(latlng, options)
 
-使用 L.icon() 建立圖標
+latlng: 設定圖標經緯度
+options : 設定圖標狀態
+例如: 圖標設定能拖曳，就在 options 新增 draggable: true 就可以拖曳圖標，draggable 預設為 false
 
 ```javascript!
-  const greenIcon = L.icon({
-    iconUrl: "/src/assets/day3-Icons/leaf-green.png",
-    shadowUrl: "/src/assets/day3-Icons/leaf-shadow.png",
+const marker = L.marker([23.465766, 120.448608], {
+    draggable: true,
+  }).addTo(map);
 
-    iconSize: [50, 64],
-    shadowSize: [50, 64],
-    iconAnchor: [0, 0],
-    shadowAnchor: [4, 62],
-    popupAnchor: [-3, -76],
+```
+
+### L.circle
+
+    L.circle(latlng, options)
+
+除了設定一般圖標外也可以在地圖新增圓形，參數設定方式也是跟 L.marker 一樣需要給經緯度和 options 設定圓形狀態
+
+```javascript!
+
+ const circle = L.circle([23.438049, 121.184692], {
+    color: "blue",
+    fillColor: "green",
+    fillOpacity: 1,
+    radius: 12000,
+  }).addTo(map);
+
+```
+
+color : 圓形錨邊顏色
+fillColor : 圓形填充色
+fillOpacity : 填充色透明度
+radius : 圓形半徑
+
+### L.polygon
+
+    L.polygon(latlngs, options)
+
+latlngs : 設定多個經緯度組成多邊形
+options :　設定多邊形狀態
+
+在地圖上顯示多邊形，這裡畫一個正方形
+
+```javascript!
+
+  const polygon = L.polygon(
+    [
+      [22.687518, 121.449051],
+      [22.687518, 121.558914],
+      [22.585485, 121.558914],
+      [22.585485, 121.449051],
+    ],
+    {
+      color: "#873324",
+    }
+  ).addTo(map);
+
+```
+
+### 圖標上添加訊息
+
+1. 直接在圖標上使用 bindPopup()設定要顯示的內容
+
+```javascript!
+
+marker.bindPopup("<b>Hello world!</b><br>I am a marker.").openPopup();
+circle.bindPopup("<b>Hello world!</b><br>I am a circle.");
+
+```
+
+如果圖標一開始就想要有訊息，設定 bindPopup()後在接上 openPopup()預設就會先顯示訊息，沒有加 openPopup() 就是點擊後會出現訊息
+
+2. 除了在圖標上顯示訊息，也可以在自己設定的經緯度顯示訊息
+
+```javascript!
+
+const popup = L.popup()
+    .setLatLng([23.800424, 121.1187742])
+    .setContent("I am a standalone popup.")
+    .openOn(map);
+
+```
+
+setLatLng : 設定經緯度
+setContent : 設定內容
+openOn : 將訊息設定到地圖上
+
+## 地圖監聽事件
+
+這裡結合 L.popup()並且在地圖上監聽點擊事件，透過點擊顯示目前經緯度，點擊到的經緯度可在事件中的 latlng 取得
+
+![](https://i.imgur.com/SWpH1nk.png)
+
+```javascript!
+
+const popup = L.popup();
+
+map.on("click", (e) => {
+    popup
+      .setLatLng(e.latlng)
+      .setContent("You clicked the map at " + e.latlng.toString())
+      .openOn(map);
   });
 
-L.marker([25.03388, 121.56531], { icon: greenIcon }).addTo(map);
 ```
-
-- iconUrl : 設定圖片路徑
-- shadowUrl : 設定陰影圖片路徑
-- iconSize : 圖標尺寸
-- shadowSize : 陰影尺寸
-- iconAnchor : 圖標相對於經緯度的偏移量也就是[25.03388, 121.56531]的偏移
-
-例如目前經緯度在[25.03388, 121.56531] 這個地方
-![](https://i.imgur.com/Qd4Eklg.png)
-
-接下來 L.icon 的 option 中設定 iconAnchor，我先設定[0,0]查看一開始渲染的位置
-![](https://i.imgur.com/TF8Mw3t.png)
-圖片位置會在初始經緯度也就是[25.03388, 121.56531]開始往下渲染
-
-- shadowAnchor : 陰影相對於經緯度的偏移量
-- popupAnchor : 圖標的訊息相對於 iconAnchor 的偏移
-
-這時候在地圖上就能看到設定的圖標
-
-![](https://i.imgur.com/DMCtfUh.png)
-
-## 圖標共用設定
-
-如果有多個圖標有共同的設定，leaflet 有提供 L.Icon.extend 協助設定
-
-假如圖標有共同的陰影，這時透過 L.Icon.extend 設定
-
-```javascript!
- const LeafIcon = L.Icon.extend({
-    options: {
-      shadowUrl: "/src/assets/day3-Icons/leaf-shadow.png",
-      iconSize: [38, 95],
-      shadowSize: [50, 64],
-      iconAnchor: [22, 94],
-      shadowAnchor: [4, 62],
-      popupAnchor: [-3, -76],
-    },
-  });
-```
-
-然後創造 3 個分別是紅、綠、橘色圖標
-
-```javascript!
-
-const greenIcon = new LeafIcon({ iconUrl: "/src/assets/day3-Icons/leaf-green.png" });
-const redIcon = new LeafIcon({ iconUrl: "/src/assets/day3-Icons/leaf-red.png" });
-const orangeIcon = new LeafIcon({ iconUrl: "/src/assets/day3-Icons/leaf-orange.png" });
-
-```
-
-最後將 3 個圖標加到地圖上
-
-```javascript!
-L.marker([25.03388, 121.56531], { icon: greenIcon }).addTo(map).bindPopup("I am a green leaf.");
-L.marker([25.033, 121.56531], { icon: redIcon }).addTo(map).bindPopup("I am a red leaf.");
-L.marker([25.0334, 121.564], { icon: orangeIcon }).addTo(map).bindPopup("I am an orange leaf.");
-
-```
-
-查看地圖
-![](https://i.imgur.com/lofyebN.png)
-
-## GeoJSON 介紹
-
-GeoJSON 是一種處理地理資訊的 JSON 格式，GeoJSON 支援像是點、線、多邊形的幾何形狀，當中也包含了特徵或特徵的集合資訊，組成資料如下
-
-```javascript!
-
-const freeBus = {
-  type: "FeatureCollection",
-  features: [
-    {
-      type: "Feature",
-      geometry: {
-        type: "LineString",
-        coordinates: [
-          [-105.00341892242432, 39.75383843460583],
-          [-105.0008225440979, 39.751891803969535],
-        ],
-      },
-      properties: {
-        popupContent: "This is a free bus line that will take you across downtown.",
-        underConstruction: false,
-      },
-    },
-    {
-      type: "Feature",
-      geometry: {
-        type: "LineString",
-        coordinates: [
-          [-105.0008225440979, 39.751891803969535],
-          [-104.99820470809937, 39.74979664004068],
-        ],
-      },
-      properties: {
-        popupContent: "This is a free bus line that will take you across downtown.",
-        underConstruction: true,
-      },
-    },
-  ],
-};
-
-
-```
-
-- FeatureCollection : 代表特徵集合資訊
-- features 屬性 : 包含許多 feature(特徵)的物件
-- geometry :
-  - type: 可以是 Point(點) LineString(線段)等幾何
-  - coordinates : 組成幾何圖形的座標
-- properties : 存放關於圖形的資訊
