@@ -1,7 +1,7 @@
 <template>
   <!-- <ImageOverlay /> -->
-  <VideoOverlay />
-  <!-- <SVGOverlay /> -->
+  <!-- <VideoOverlay /> -->
+  <SVGOverlay />
 </template>
 
 <script setup>
