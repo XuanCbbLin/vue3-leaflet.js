@@ -1,5 +1,10 @@
 <template>
-  <div class="mapContainer" ref="mapContainer"></div>
+  <div class="mapContainer" ref="mapContainer">
+    <div class="absolute z-500 top-5 right-3">
+      <div class="text-xl mb-2" @click="videoPause">⏸</div>
+      <div class="text-xl" @click="videoPlay">▶️</div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -19,6 +24,8 @@ const bounds = L.latLngBounds([
   [13, -100],
 ]);
 
+let videoOverlay = {};
+
 onMounted(() => {
   const map = L.map(mapContainer.value);
   const tiles = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -28,43 +35,23 @@ onMounted(() => {
 
   map.fitBounds(bounds);
 
-  const videoOverlay = L.videoOverlay(videoUrls, bounds, {
-    opacity: 0.8,
+  videoOverlay = L.videoOverlay(videoUrls, bounds, {
+    opacity: 1,
     errorOverlayUrl: errorOverlayUrl,
     interactive: true,
     autoplay: true,
     muted: true,
-    playsInline: true,
+    loop: false,
   }).addTo(map);
-
-  videoOverlay.on("load", function () {
-    const MyPauseControl = L.Control.extend({
-      onAdd: function () {
-        const button = L.DomUtil.create("button");
-        button.title = "Pause";
-        button.innerHTML = '<span aria-hidden="true">⏸</span>';
-        L.DomEvent.on(button, "click", function () {
-          videoOverlay.getElement().pause();
-        });
-        return button;
-      },
-    });
-    const MyPlayControl = L.Control.extend({
-      onAdd: function () {
-        var button = L.DomUtil.create("button");
-        button.title = "Play";
-        button.innerHTML = '<span aria-hidden="true">▶️</span>';
-        L.DomEvent.on(button, "click", function () {
-          videoOverlay.getElement().play();
-        });
-        return button;
-      },
-    });
-
-    const pauseControl = new MyPauseControl().addTo(map);
-    const playControl = new MyPlayControl().addTo(map);
-  });
 });
+
+const videoPause = () => {
+  videoOverlay.getElement().pause();
+};
+
+const videoPlay = () => {
+  videoOverlay.getElement().play();
+};
 </script>
 
 <style lang="scss" scoped>
