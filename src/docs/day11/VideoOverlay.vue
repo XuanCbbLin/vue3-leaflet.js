@@ -1,8 +1,8 @@
 <template>
   <div class="mapContainer" ref="mapContainer">
-    <div class="absolute z-500 top-5 right-3">
-      <div class="text-xl mb-2" @click="videoPause">⏸</div>
-      <div class="text-xl" @click="videoPlay">▶️</div>
+    <div class="absolute z-500 top-5 right-3 text-xl">
+      <div class="mb-2" @click="videoPause">⏸</div>
+      <div @click="videoPlay">▶️</div>
     </div>
   </div>
 </template>
@@ -14,10 +14,7 @@ import { onMounted, ref } from "vue";
 
 const mapContainer = ref(null);
 
-const videoUrls = [
-  "https://www.mapbox.com/bites/00188/patricia_nasa.webm",
-  "https://www.mapbox.com/bites/00188/patricia_nasa.mp4",
-];
+const videoUrls = "https://www.mapbox.com/bites/00188/patricia_nasa.mp4";
 const errorOverlayUrl = "https://cdn-icons-png.flaticon.com/512/110/110686.png";
 const bounds = L.latLngBounds([
   [32, -130],
@@ -40,7 +37,6 @@ onMounted(() => {
     errorOverlayUrl: errorOverlayUrl,
     interactive: true,
     autoplay: true,
-    muted: true,
     loop: false,
   }).addTo(map);
 });
