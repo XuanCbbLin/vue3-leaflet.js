@@ -1,11 +1,10 @@
 <template>
-  <!-- <VideoOverlay /> -->
-  <SVGOverlay />
+  <Panes />
 </template>
 
 <script setup>
-import VideoOverlay from "./docs/day11/VideoOverlay.vue";
-import SVGOverlay from "./docs/day11/SVGOverlay.vue";
+import Panes from "./docs/day9/Panes.vue";
+import Day4 from "./docs/day4/Day4.vue";
 </script>
 
 <style lang="scss" scoped></style>

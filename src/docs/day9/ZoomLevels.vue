@@ -12,8 +12,7 @@ const mapContainer = ref(null);
 onMounted(() => {
   const map = L.map(mapContainer.value, {
     center: [23.611, 120.768],
-    zoom: 8,
-    zoomSnap: 0.5,
+    zoomSnap: 0.25,
   });
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -22,25 +21,29 @@ onMounted(() => {
   }).addTo(map);
 
   // L.Control.Scale
-  L.control
-    .scale({
-      maxWidth: 100,
-      updateWhenIdle: false,
-      position: "bottomright",
-    })
-    .addTo(map);
+  // L.control
+  //   .scale({
+  //     maxWidth: 200,
+  //     updateWhenIdle: true,
+  //     position: "topright",
+  //   })
+  //   .addTo(map);
 
   // setView(center, zoom)
-  // map.setView([53, 123]);
+  map.setView([23.611, 120.768], 8);
 
   // flyTo(center, zoom)
-  // map.flyTo([0, 0]);
+  // map.flyTo([24.27701247166408, 120.96496582031251], 14);
 
   // zoomIn()/zoomIn(delta)
-  // map.zoomIn(3);
+  // map.zoomIn(0.5);
 
   // zoomOut()/zoomOut(delta)
   // map.zoomOut(3);
+
+  map.on("click", () => {
+    map.zoomIn(0.1);
+  });
 });
 </script>
 
