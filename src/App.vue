@@ -1,12 +1,9 @@
 <template>
-  <!-- <Panes /> -->
-  <MarkerCluster />
+  <RandomIcons />
 </template>
 
 <script setup>
-import Panes from "./docs/day9/Panes.vue";
-import Day4 from "./docs/day4/Day4.vue";
-import MarkerCluster from "./docs/day12/MarkerCluster.vue";
+import RandomIcons from "./docs/day12/randomIcons.vue";
 </script>
 
 <style lang="scss" scoped></style>
