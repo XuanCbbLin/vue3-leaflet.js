@@ -24,10 +24,10 @@ onMounted(() => {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
 
-  for (var i = 0; i < addressPoints.length; i++) {
-    var a = addressPoints[i];
-    var title = a[2];
-    var marker = L.marker(new L.LatLng(a[0], a[1]), { title: title });
+  for (let i = 0; i < addressPoints.length; i++) {
+    const feature = addressPoints[i];
+    const title = feature[2];
+    const marker = L.marker(new L.LatLng(feature[0], feature[1]), { title: title });
     marker.bindPopup(title);
     markers.addLayer(marker);
   }
@@ -35,5 +35,3 @@ onMounted(() => {
   map.addLayer(markers);
 });
 </script>
-
-<style lang="scss" scoped></style>
