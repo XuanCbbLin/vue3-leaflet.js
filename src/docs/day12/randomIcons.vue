@@ -1,38 +1,71 @@
 <template>
-  <div ref="mapContent" class="h-[100vh]"></div>
+  <div class="flex">
+    <div class="w-full" ref="mapContent"></div>
+    <ul class="w-[500px] h-[900px] overflow-y-scroll">
+      <li
+        class="px-2 py-3 text-center cursor-pointer hover:bg-gray-200"
+        :class="{ 'bg-gray-200': currentCoordinate === coordinate }"
+        v-for="coordinate in coordinateMenu"
+        :key="coordinate"
+        @click="moveMarker(coordinate)"
+      >
+        {{ `${coordinate.latitude} , ${coordinate.longtitude}` }}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
+let map = {};
 const mapContent = ref(null);
+const currentCoordinate = ref(null);
+const coordinateMenu = reactive([]);
+const markers = [];
 
 const getRandom = (min, max) => {
   return Math.random() * (max - min) + min;
 };
 
+for (let i = 0; i < 20; i++) {
+  coordinateMenu[i] = { latitude: getRandom(22, 25), longtitude: getRandom(120, 122) };
+}
+
+const moveMarker = (coordinate) => {
+  currentCoordinate.value = coordinate;
+
+  const filterMarker = markers.filter((marker) => {
+    return marker._latlng.lat === coordinate.latitude && marker._latlng.lng === coordinate.longtitude;
+  });
+
+  filterMarker[0].openPopup();
+  map.flyTo([coordinate.latitude, coordinate.longtitude], 9);
+};
+
 onMounted(() => {
-  const map = L.map(mapContent.value).setView([23.695, 121.102], 8);
+  map = L.map(mapContent.value).setView([23.695, 121.102], 8);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(map);
 
-  for (let i = 0; i < 20; i++) {
-    const latitude = getRandom(22, 25);
-    const longtitude = getRandom(120, 122);
-    const marker = L.marker([latitude, longtitude]);
+  coordinateMenu.forEach((coordinate, index) => {
+    markers[index] = L.marker([coordinate.latitude, coordinate.longtitude]);
 
-    marker.bindPopup(`${latitude} , ${longtitude}`).openPopup();
+    markers[index].bindPopup(`${coordinate.latitude} , ${coordinate.longtitude}`).addTo(map);
 
-    marker.on("click", () => {
-      map.flyTo([latitude, longtitude], 9);
+    markers[index].addEventListener("click", (e) => {
+      const filterMarker = coordinateMenu.filter((coordinate) => {
+        return e.latlng.lat === coordinate.latitude && e.latlng.lng === coordinate.longtitude;
+      });
+
+      currentCoordinate.value = filterMarker[0];
+      map.flyTo([e.latlng.lat, e.latlng.lng], 9);
     });
-
-    marker.addTo(map);
-  }
+  });
 });
 </script>
