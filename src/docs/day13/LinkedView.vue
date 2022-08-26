@@ -1,29 +1,25 @@
 <template>
   <div class="flex">
     <div class="w-full" ref="mapContainer"></div>
-    <ul class="h-[900px] w-[300px] overflow-y-scroll">
-      <li
-        class="text-center cursor-pointer px-2 py-3 hover:bg-dark-700 hover:text-light-200"
-        :class="currentCity === city.id ? 'bg-dark-700 text-white' : ''"
-        v-for="city in cityData.features"
-        :key="city"
-        @mouseover="areaHighlight(city)"
-        @mouseout="resetAreaHighlight(city)"
-      >
-        {{ city.properties.name }}
-      </li>
-    </ul>
+    <Menu
+      :currentCityId="currentCityId"
+      :cityData="cityData"
+      @setAreaHighlight="setAreaHighlight"
+      @resetAreaHighlight="resetAreaHighlight"
+    />
   </div>
 </template>
 
 <script setup>
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import Menu from "./Menu.vue";
 import { cityData } from "./us-states.js";
 import { onMounted, ref } from "vue";
 
 const mapContainer = ref(null);
-const currentCity = ref("");
+const currentCityId = ref("");
+
 let geoJSON = [];
 let map = {};
 
@@ -33,7 +29,7 @@ const getFilterArea = (city) => {
   });
 };
 
-const areaHighlight = (city) => {
+const setAreaHighlight = (city) => {
   getFilterArea(city)[0].setStyle({
     weight: 4,
     fillOpacity: 0.7,
@@ -51,13 +47,13 @@ const onEachFeature = (feature, layer) => {
       fillOpacity: 0.7,
     });
 
-    currentCity.value = e.target.feature.id;
+    currentCityId.value = e.target.feature.id;
   });
 
   layer.addEventListener("mouseout", (e) => {
     geoJSON.resetStyle(e.target);
 
-    currentCity.value = "";
+    currentCityId.value = "";
   });
 };
 
