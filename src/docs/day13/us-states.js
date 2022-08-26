@@ -1,4 +1,4 @@
-export const staticData = {
+export const cityData = {
   type: "FeatureCollection",
   features: [
     {
