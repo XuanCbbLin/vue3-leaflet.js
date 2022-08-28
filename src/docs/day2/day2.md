@@ -1,5 +1,3 @@
-###### tags: `鐵人賽`
-
 # Day2 Leaflet.js 介紹和起手式
 
 ## Leaflet.js 是什麼
