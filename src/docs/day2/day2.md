@@ -1,12 +1,14 @@
-# 鐵人賽 Day2
+###### tags: `鐵人賽`
 
-# Leaflet.js 介紹和起手式
+# Day2 Leaflet.js 介紹和起手式
 
 ## Leaflet.js 是什麼
 
-Leaflet 是一個開源的函式庫,能夠實現基本的地圖操作,建立圖層,標記,彈出窗口,縮放等操作
+Leaflet 是一個開源的函式庫,能夠實現基本的地圖操作,建立圖層,標記,彈出窗口,縮放等操作。
 
 ## 怎麼導入 Leaflet.js
+
+以下 3 種方式引入建立地圖前需要的 CSS 和 JS 資料。
 
 1. CDN 引入
 
@@ -53,8 +55,8 @@ import "leaflet/dist/leaflet.css";
 </script>
 ```
 
-產生地圖:
-建立地圖區塊,用 ref 獲取節點
+產生地圖物件:
+建立地圖區塊，用 ref 獲取節點
 
 ```htmlmixed!
 <template>
@@ -80,11 +82,6 @@ onMounted(() => {
     center: [23.611, 120.768],
     zoom: 8,
   });
-
-
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  }).addTo(map);
 });
 
 ```
@@ -104,14 +101,16 @@ L.map 第 1 個參數能接收 ID 選取器或 DOM, 第 2 個參數 options 用�
 }
 ```
 
-第二個參數 options
+第二個參數 options:
 
 center : 設定地圖經緯度
 zoom : 設定地圖縮放層級
 
-### L.tileLayer 設定圖資:
+### L.tileLayer 建立圖資:
 
 這裡我使用官方範例 openstreetmap 建立圖資
+
+openstreetmap 網址: https://www.openstreetmap.org/#map=11/23.6502/121.0226
 
     L.tilelayer(<String> urlTemplate, <TileLayer options> options?)
 
@@ -123,7 +122,49 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 ```
 
-urlTemplate : 圖資請求設定
-attribution : 圖資版權設定
+設定圖資後使用 addTo() 進入 map 物件
 
-設定圖資後使用 addTo()進入 map 物件
+urlTemplate : 圖資請求設定 https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+
+底下圖磚為例
+![](https://i.imgur.com/ITRkzxX.png)
+https://c.tile.openstreetmap.org/8/213/110.png
+
+- {s}: 圖磚請求的 subDomain 預設為 a、b、c
+- {z}: 地圖的 zoom 等級
+- {x}: 圖磚的 x 座標
+- {y}: 圖磚的 y 座標
+
+attribution: 圖資版權設定
+
+地圖建立完成:
+![](https://i.imgur.com/htNtwnt.png)
+
+完整程式碼:
+
+```htmlmixed!
+<template>
+  <div class="mapContainer" ref="mapContainer"></div>
+</template>
+```
+
+```javascript!
+<script setup>
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { onMounted, ref } from "vue";
+
+const mapContainer = ref(null);
+
+onMounted(() => {
+  const map = L.map(mapContainer.value, {
+    center: [23.611, 120.768],
+    zoom: 8,
+  });
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+});
+</script>
+```

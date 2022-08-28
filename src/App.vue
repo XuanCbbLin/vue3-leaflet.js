@@ -1,15 +1,9 @@
 <template>
-  <!-- <LinkedView /> -->
-  <!-- <RandomIcons /> -->
-  <!-- <CustomMarkerAndPopup /> -->
-  <PopupTabs />
+  <Day2 />
 </template>
 
 <script setup>
-import RandomIcons from "./docs/day12/randomIcons.vue";
-import LinkedView from "./docs/day13/LinkedView.vue";
-import CustomMarkerAndPopup from "./docs/day14/customMarkerAndPopup.vue";
-import PopupTabs from "./docs/day15/PopupTabs.vue";
+import Day2 from "./docs/day2/Day2.vue";
 </script>
 
 <style lang="scss" scoped></style>
