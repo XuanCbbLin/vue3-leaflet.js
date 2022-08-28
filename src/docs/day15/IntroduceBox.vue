@@ -28,12 +28,11 @@ const props = defineProps({
   currentName: String,
 });
 
-const emit = defineEmits(["change"]);
+const emit = defineEmits(["getDom"]);
 
 const dom = ref(null);
 
 onMounted(() => {
-  console.log("child");
-  emit("change", dom.value);
+  emit("getDom", dom.value);
 });
 </script>
