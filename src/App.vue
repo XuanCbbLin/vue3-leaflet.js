@@ -1,6 +1,6 @@
 <template>
-  <Day3 />
-  <!-- <SideBarInMap /> -->
+  <!-- <Day3 /> -->
+  <SideBarInMap />
 </template>
 
 <script setup>

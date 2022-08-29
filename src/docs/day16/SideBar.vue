@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-md h-full px-4 overflow-y-scroll">
+  <div class="max-w-md h-full px-4 overflow-y-scroll" ref="sideBarDom">
     <div v-for="travel in travelList" :key="travel">
       <div class="text-center py-4 text-xl">{{ travel.title }}</div>
       <img :src="travel.img" :alt="travel.title" />
@@ -9,7 +9,12 @@
 </template>
 
 <script setup>
-defineProps({
-  travelList: Array,
+import { inject, onMounted, ref } from "vue";
+
+const travelList = inject("travelList");
+const sideBarDom = ref(null);
+
+onMounted(() => {
+  console.log(sideBarDom.value);
 });
 </script>
