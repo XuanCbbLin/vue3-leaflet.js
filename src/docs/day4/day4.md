@@ -1,10 +1,8 @@
 ###### tags: `鐵人賽`
 
-# Day4
+# Day4 客制化圖標和 GeoJSON 介紹
 
-# 客制化圖標和 GeoJSON 介紹
-
-除了可以用 L.marker()或 L.circle()等方式建立基本圖標，也可以用 L.icon()客製圖標
+除了可以用 L.marker() 或 L.circle() 等方式建立基本圖標，也可以用 L.icon() 客製圖標。
 
 ## L.icon()
 
@@ -35,14 +33,14 @@ L.marker([25.03388, 121.56531], { icon: greenIcon }).addTo(map);
 - shadowUrl : 設定陰影圖片路徑
 - iconSize : 圖標尺寸
 - shadowSize : 陰影尺寸
-- iconAnchor : 圖標相對於經緯度的偏移量也就是[25.03388, 121.56531]的偏移
+- iconAnchor : 圖標相對於經緯度的偏移量也就是 [25.03388, 121.56531] 的偏移
 
-例如目前經緯度在[25.03388, 121.56531] 這個地方
+例如目前經緯度在 [25.03388, 121.56531] 這個地方
 ![](https://i.imgur.com/Qd4Eklg.png)
 
-接下來 L.icon 的 option 中設定 iconAnchor，我先設定[0,0]查看一開始渲染的位置
+接下來 L.icon 的 option 中設定 iconAnchor，我先設定 [0,0] 查看一開始渲染的位置
 ![](https://i.imgur.com/TF8Mw3t.png)
-圖片位置會在初始經緯度也就是[25.03388, 121.56531]開始往下渲染
+圖片位置會在初始經緯度也就是 [25.03388, 121.56531] 開始往下渲染
 
 - shadowAnchor : 陰影相對於經緯度的偏移量
 - popupAnchor : 圖標的訊息相對於 iconAnchor 的偏移
