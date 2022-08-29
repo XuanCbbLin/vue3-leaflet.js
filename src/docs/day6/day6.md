@@ -1,12 +1,10 @@
 ###### tags: `鐵人賽`
 
-# Day6
+# Day6 GeoJSON 互動式地圖
 
-# GeoJSON 互動式地圖
+本篇使用 leaflet 官方提供的範例完成人口密度地圖，使用已準備好的 GeoJSON 資料產生多邊形，並且摸到該區塊加入樣式。
 
-本篇使用 leaflet 官方提供的範例完成人口密度地圖,使用已準備好的 GeoJSON 資料產生多邊形，並且摸到該區塊加入樣式
-
-範例網址: https://leafletjs.com/examples/choropleth/
+官方範例網址: https://leafletjs.com/examples/choropleth/
 
 主要功能如下:
 
@@ -170,7 +168,6 @@ onMounted(() => {
  L.geoJson(statesData, {
     onEachFeature: onEachFeature,
   }).addTo(map);
-
 });
 
 <script>
