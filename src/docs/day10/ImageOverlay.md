@@ -1,8 +1,6 @@
 ###### tags: `鐵人賽`
 
-# Day10
-
-# 地圖設定 ImageOverlay
+# Day10 地圖設定 ImageOverlay
 
 地圖如果需要加載圖片可使用 ImageOverlay 這個功能
 
@@ -14,7 +12,7 @@ imageUrl : 圖片的路徑
 LatLngBounds : 圖片顯示的位置
 options : 關於圖片的狀態設定
 
-1. 先 L.tileLayer 透過產生底圖,並且加到地圖上
+1. 先 L.tileLayer 透過產生底圖，並且加到地圖上
 
 ```javascript!
 
