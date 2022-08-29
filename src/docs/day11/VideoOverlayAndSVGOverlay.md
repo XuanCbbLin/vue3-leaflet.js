@@ -1,8 +1,6 @@
 ###### tags: `鐵人賽`
 
-# day11
-
-# 地圖上建立 video 圖層和 svg 圖層
+# day11 地圖上建立 video 圖層和 svg 圖層
 
 ## video 圖層
 
@@ -95,7 +93,7 @@ onMounted(() => {
 
 ```
 
-2. 使用 getElement()獲取當下的播放器，並且用 pause() 或 play()控制播放器
+2. 使用 getElement() 獲取當下的播放器，並且用 pause() 或 play() 控制播放器
 
 ```javascript!
 
