@@ -86,10 +86,12 @@ onMounted(() => {
 
 ```htmlmixed!
 
-<div class="absolute z-500 top-5 right-3 text-xl">
-    <div class="mb-2" @click="videoPause">⏸</div>
-    <div @click="videoPlay">▶️</div>
-</div>
+ <div class="mapContainer" ref="mapContainer">
+    <div class="absolute z-500 top-5 right-3 text-xl">
+      <div class="mb-2">⏸</div>
+      <div >▶️</div>
+    </div>
+  </div>
 
 ```
 
@@ -134,14 +136,14 @@ options : svg 的狀態設定
 
 1. 建立 svg 節點，並且使用 ref 獲取 svg 節點
 
-```htmlembedded!
-
-  <svg viewBox="0 0 200 200" ref="svg">
+```htmlmixed!
+  <div class="mapContainer" ref="mapContainer">
+    <svg viewBox="0 0 200 200" ref="svg">
       <rect width="200" height="200"></rect>
       <rect x="75" y="23" width="50" height="50" fill="red"></rect>
       <rect x="75" y="123" width="50" height="50" fill="#0013ff"></rect>
-  </svg>
-
+    </svg>
+  </div>
 ```
 
 ```javascript!
