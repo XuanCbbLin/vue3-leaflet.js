@@ -20,7 +20,7 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { onMounted, ref } from "vue";
-import { statesData } from "../day5/us-states";
+import { statesData } from "./us-states";
 
 const mapContainer = ref(null);
 const areaDensity = ref("");
