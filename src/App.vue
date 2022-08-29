@@ -1,11 +1,9 @@
 <template>
-  <!-- <Day2 /> -->
-  <Day7 />
+  <SideBarInMap />
 </template>
 
 <script setup>
-import Day2 from "./docs/day2/Day2.vue";
-import Day7 from "./docs/day7/day7.vue";
+import SideBarInMap from "./docs/day16/SideBarInMap.vue";
 </script>
 
 <style lang="scss" scoped></style>
