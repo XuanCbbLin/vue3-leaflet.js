@@ -1,8 +1,6 @@
 ###### tags: `鐵人賽`
 
-# day5
-
-# GeoJSON 使用方式
+# day5 GeoJSON 使用方式
 
 本篇要來介紹如何將 GeoJSON 的資料顯示在地圖上
 
@@ -54,7 +52,7 @@ onMounted(() => {
 
 ### options 裡給特徵設定樣式
 
-在 geoJSON 建立線段，在 L.geoJSON 使用 style 設定線段樣式
+在 geoJSON 建立線段，在 L.geoJSON 使用 style 設定線段樣式。
 
 1. 建立線段
 
@@ -113,9 +111,9 @@ onMounted(() => {
 地圖顯示:
 ![](https://i.imgur.com/Sis4AAU.png)
 
-除了設定共用樣式資料，也可以傳遞函式客制樣式
+除了設定共用樣式資料，也可以傳遞函式客制樣式。
 
-這裡建立 2 個多邊形並且設定不同樣式
+這裡建立 2 個多邊形並且設定不同樣式 :
 
 1. 多邊形特徵
 
@@ -160,7 +158,7 @@ export const polygons  = [
 
 2. L.geoJSON 的 style 設定篩選樣式函式
 
-多邊形分別設定紅色和藍色
+   多邊形分別設定紅色和藍色
 
 ```javascript!
 <script setup>
@@ -248,7 +246,7 @@ onMounted(() => {
 - 函式接收的參數
 
   ```javascript!
-      function (feature, latlng){}
+  function (feature, latlng){}
   ```
 
   - feature : 2 筆點資料
