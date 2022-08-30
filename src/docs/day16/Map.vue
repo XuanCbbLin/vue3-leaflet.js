@@ -31,8 +31,8 @@ onMounted(() => {
 
 watch(
   () => props.marketLatLng,
-  (newMarker, oldMarker) => {
-    map.flyTo(newMarker.latLng, 10);
+  (newMarker) => {
+    map.flyTo(newMarker.latLng, 11);
   }
 );
 </script>
