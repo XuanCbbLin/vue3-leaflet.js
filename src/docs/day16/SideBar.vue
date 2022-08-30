@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-md h-full px-4 overflow-y-scroll" ref="postParent">
+  <div class="max-w-md h-full px-4 overflow-y-scroll">
     <div v-for="travel in travelList" :key="travel" ref="postDoms">
       <div class="text-center py-4 text-xl">{{ travel.title }}</div>
       <img :src="travel.img" :alt="travel.title" ref="imgs" />
@@ -18,7 +18,6 @@ defineProps({
 const emit = defineEmits(["getPost", "moveMarker"]);
 
 const postDoms = ref(null);
-const postParent = ref(null);
 const imgs = ref(null);
 
 const callback = (entry) => {
