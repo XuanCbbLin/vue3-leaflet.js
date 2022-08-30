@@ -1,6 +1,6 @@
 <template>
-  <div class="max-w-md h-full px-4 overflow-y-scroll" ref="sideBarDom">
-    <div v-for="travel in travelList" :key="travel">
+  <div class="max-w-md h-full px-4 overflow-y-scroll" ref="postParent">
+    <div v-for="travel in travelList" :key="travel" :ref="getPostDom">
       <div class="text-center py-4 text-xl">{{ travel.title }}</div>
       <img :src="travel.img" :alt="travel.title" />
       <p class="pt-2 pb-8">{{ travel.dsc }}</p>
@@ -9,12 +9,21 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 
-const travelList = inject("travelList");
-const sideBarDom = ref(null);
+defineProps({
+  travelList: Array,
+});
+
+const emit = defineEmits(["getPost", "moveMarker"]);
+
+const postDoms = reactive([]);
+const postParent = ref(null);
+const getPostDom = (dom) => {
+  postDoms.push(dom);
+};
 
 onMounted(() => {
-  console.log(sideBarDom.value);
+  emit("getPost", postDoms);
 });
 </script>
