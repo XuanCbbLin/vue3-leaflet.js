@@ -1,10 +1,9 @@
 <template>
-  <!-- <Day3 /> -->
-  <SideBarInMap />
+  <SideBarPopup />
 </template>
 
 <script setup>
-import SideBarInMap from "./docs/day16/SideBarInMap.vue";
+import SideBarPopup from "./docs/day17/sideBarPopup.vue";
 </script>
 
 <style lang="scss" scoped></style>
