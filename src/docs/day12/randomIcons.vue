@@ -1,6 +1,8 @@
 <template>
   <div class="flex">
+    <!-- map -->
     <div class="w-full" ref="mapContent"></div>
+    <!-- menu -->
     <ul class="w-[500px] h-[900px] overflow-y-scroll">
       <li
         class="px-2 py-3 text-center cursor-pointer hover:bg-gray-200"
@@ -37,8 +39,11 @@ for (let i = 0; i < 20; i++) {
 const moveMarker = (coordinate) => {
   currentCoordinate.value = coordinate;
 
+  // 篩選點擊的 icon
   const filterMarker = markers.filter((marker) => {
-    return marker._latlng.lat === coordinate.latitude && marker._latlng.lng === coordinate.longtitude;
+    return (
+      marker._latlng.lat === coordinate.latitude && marker._latlng.lng === coordinate.longtitude
+    );
   });
 
   filterMarker[0].openPopup();
@@ -58,6 +63,7 @@ onMounted(() => {
 
     markers[index].bindPopup(`${coordinate.latitude} , ${coordinate.longtitude}`).addTo(map);
 
+    // 監聽 icon 並且篩選座標
     markers[index].addEventListener("click", (e) => {
       const filterMarker = coordinateMenu.filter((coordinate) => {
         return e.latlng.lat === coordinate.latitude && e.latlng.lng === coordinate.longtitude;
