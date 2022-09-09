@@ -21,9 +21,9 @@ const postDoms = ref(null);
 const imgs = ref(null);
 
 const callback = (entry) => {
-  entry.forEach((aa) => {
-    if (aa.intersectionRatio === 1) {
-      emit("moveMarker", aa.target);
+  entry.forEach((bound) => {
+    if (bound.intersectionRatio === 1) {
+      emit("moveMarker", bound.target);
     }
   });
 };
