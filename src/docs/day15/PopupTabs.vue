@@ -9,23 +9,22 @@ import IntroduceBox from "./IntroduceBox.vue";
 import Map from "./Map.vue";
 
 const dom = ref(null);
-const currentName = ref("a");
+const currentName = ref("tab");
 
 const introduceData = reactive([
   {
-    name: "a",
+    name: "tab",
     img: "https://picsum.photos/id/684/600/400",
-    content:
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum ratione nulla iure rem tempora, quasi quis minima consequatur aut veritatis dolor, omnis nobis vel eveniet reprehenderit, a porro ut quo!",
+    content: "Ipsum ratione nulla iure rem tempora, quasi quis minima consequatur",
   },
   {
-    name: "b",
+    name: "tab2",
     img: "https://picsum.photos/id/685/600/400",
     content: "Lorem ipsum, dolor sit amet consectetur adipisicing elit",
   },
 ]);
 
-const getDom = (dom1) => {
-  dom.value = dom1;
+const getDom = (boxDom) => {
+  dom.value = boxDom;
 };
 </script>
