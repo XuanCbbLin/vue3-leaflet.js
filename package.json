@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@bepo65/leaflet.fullscreen": "^2.0.2",
     "leaflet": "^1.8.0",
     "leaflet.markercluster": "^1.5.3",
     "sass": "^1.54.0",

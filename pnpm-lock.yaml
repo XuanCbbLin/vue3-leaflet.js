@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@bepo65/leaflet.fullscreen': ^2.0.2
   '@vitejs/plugin-vue': ^3.0.0
   leaflet: ^1.8.0
   leaflet.markercluster: ^1.5.3
@@ -11,6 +12,7 @@ specifiers:
   windicss: ^3.5.6
 
 dependencies:
+  '@bepo65/leaflet.fullscreen': 2.0.2_leaflet@1.8.0
   leaflet: 1.8.0
   leaflet.markercluster: 1.5.3_leaflet@1.8.0
   sass: 1.54.0
@@ -45,6 +47,15 @@ packages:
     dependencies:
       '@babel/helper-validator-identifier': 7.18.6
       to-fast-properties: 2.0.0
+
+  /@bepo65/leaflet.fullscreen/2.0.2_leaflet@1.8.0:
+    resolution: {integrity: sha512-NWqCj09L3CigUWB7Gm0p0UrfZtUAOwL6C/U3yT/T0Wquevet6m9jogsa7IgfRuapIwkcMP9gRYhrbfay2mhUPA==}
+    peerDependencies:
+      leaflet: ^1.7.0
+    dependencies:
+      leaflet: 1.8.0
+      screenfull: 5.2.0
+    dev: false
 
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -632,6 +643,11 @@ packages:
       chokidar: 3.5.3
       immutable: 4.1.0
       source-map-js: 1.0.2
+
+  /screenfull/5.2.0:
+    resolution: {integrity: sha512-9BakfsO2aUQN2K9Fdbj87RJIEZ82Q9IGim7FqM5OsebfoFC6ZHXgDq/KvniuLTPdeM8wY2o6Dj3WQ7KeQCj3cA==}
+    engines: {node: '>=0.10.0'}
+    dev: false
 
   /source-map-js/1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}

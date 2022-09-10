@@ -1,7 +1,8 @@
 <template>
   <!-- <CustomMarkerAndPopup /> -->
   <!-- <PopupTabs /> -->
-  <SideBarInMap />
+  <!-- <SideBarInMap /> -->
+  <LeafletControlFullScreen />
 </template>
 
 <script setup>
@@ -12,6 +13,11 @@ import CustomMarkerAndPopup from "./docs/day14/customMarkerAndPopup.vue";
 import PopupTabs from "./docs/day15/PopupTabs.vue";
 import SideBar from "./docs/day17/SideBar.vue";
 import SideBarInMap from "./docs/day16/SideBarInMap.vue";
+import LeafletControlFullScreen from "./docs/day17/Leaflet-Control-FullScreen.vue";
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+body {
+  background-color: red;
+}
+</style>
