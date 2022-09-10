@@ -11,6 +11,7 @@
   "dependencies": {
     "@bepo65/leaflet.fullscreen": "^2.0.2",
     "leaflet": "^1.8.0",
+    "leaflet-minimap": "^3.6.1",
     "leaflet.markercluster": "^1.5.3",
     "sass": "^1.54.0",
     "vue": "^3.2.37"

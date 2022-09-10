@@ -4,6 +4,7 @@ specifiers:
   '@bepo65/leaflet.fullscreen': ^2.0.2
   '@vitejs/plugin-vue': ^3.0.0
   leaflet: ^1.8.0
+  leaflet-minimap: ^3.6.1
   leaflet.markercluster: ^1.5.3
   sass: ^1.54.0
   vite: ^3.0.0
@@ -14,6 +15,7 @@ specifiers:
 dependencies:
   '@bepo65/leaflet.fullscreen': 2.0.2_leaflet@1.8.0
   leaflet: 1.8.0
+  leaflet-minimap: 3.6.1
   leaflet.markercluster: 1.5.3_leaflet@1.8.0
   sass: 1.54.0
   vue: 3.2.37
@@ -527,6 +529,10 @@ packages:
   /kolorist/1.5.1:
     resolution: {integrity: sha512-lxpCM3HTvquGxKGzHeknB/sUjuVoUElLlfYnXZT73K8geR9jQbroGlSCFBax9/0mpGoD3kzcMLnOlGQPJJNyqQ==}
     dev: true
+
+  /leaflet-minimap/3.6.1:
+    resolution: {integrity: sha512-6px8f6cfv1rKB6ACpL6bbUFGxipZOq4KsntJgBj9nOcW1RYa5+xFp8emOZwks9X+VtVVsQEwWwfgT1kTTL/LzA==}
+    dev: false
 
   /leaflet.markercluster/1.5.3_leaflet@1.8.0:
     resolution: {integrity: sha512-vPTw/Bndq7eQHjLBVlWpnGeLa3t+3zGiuM7fJwCkiMFq+nmRuG3RI3f7f4N4TDX7T4NpbAXpR2+NTRSEGfCSeA==}
