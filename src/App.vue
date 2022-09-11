@@ -1,11 +1,5 @@
-<template>
-  <!-- <LeafletMiniMap /> -->
-  <LeafletDrawToolbar />
-</template>
+<template></template>
 
-<script setup>
-import LeafletMiniMap from "./docs/day18/Leaflet-MiniMap.vue";
-import LeafletDrawToolbar from "./docs/day19/Leaflet-Draw-toolbar.vue";
-</script>
+<script setup></script>
 
 <style lang="scss"></style>
