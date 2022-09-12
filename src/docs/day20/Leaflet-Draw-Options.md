@@ -164,7 +164,7 @@ onMounted(() => {
 http://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#l-draw-rectangle
 
 參考文章
-https://www.anycodings.com/1questions/1733082/leafletdraw-mapping-how-to-initiate-the-draw-function-without-toolbar
+https://www.796t.com/post/MWI3dmE=.html
 
 設定當點擊按鈕時能夠在地圖上畫矩形
 
