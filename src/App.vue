@@ -1,9 +1,9 @@
 <template>
-  <LeafletEditHandler />
+  <Markercluster />
 </template>
 
 <script setup>
-import LeafletEditHandler from "./docs/day21/Leaflet-Edit-Handler.vue";
+import Markercluster from "./docs/day21/Markercluster.vue";
 </script>
 
 <style lang="scss"></style>
