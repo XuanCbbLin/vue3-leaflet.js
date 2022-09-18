@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@bepo65/leaflet.fullscreen": "^2.0.2",
+    "heatmap.js": "^2.0.5",
     "leaflet": "1.8.0",
     "leaflet-draw": "^1.0.4",
     "leaflet-minimap": "^3.6.1",
     "leaflet.markercluster": "^1.5.3",
+    "leaflet.polyline.snakeanim": "^0.2.0",
     "sass": "^1.54.9",
     "vue": "^3.2.39"
   },
