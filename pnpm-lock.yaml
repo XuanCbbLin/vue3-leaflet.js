@@ -3,7 +3,6 @@ lockfileVersion: 5.4
 specifiers:
   '@bepo65/leaflet.fullscreen': ^2.0.2
   '@vitejs/plugin-vue': ^3.1.0
-  heatmap.js: ^2.0.5
   leaflet: 1.8.0
   leaflet-draw: ^1.0.4
   leaflet-minimap: ^3.6.1
@@ -17,7 +16,6 @@ specifiers:
 
 dependencies:
   '@bepo65/leaflet.fullscreen': 2.0.2_leaflet@1.8.0
-  heatmap.js: 2.0.5
   leaflet: 1.8.0
   leaflet-draw: 1.0.4
   leaflet-minimap: 3.6.1
@@ -512,10 +510,6 @@ packages:
     dependencies:
       function-bind: 1.1.1
     dev: true
-
-  /heatmap.js/2.0.5:
-    resolution: {integrity: sha512-CG2gYFP5Cv9IQCXEg3ZRxnJDyAilhWnQlAuHYGuWVzv6mFtQelS1bR9iN80IyDmFECbFPbg6I0LR5uAFHgCthw==}
-    dev: false
 
   /immutable/4.1.0:
     resolution: {integrity: sha512-oNkuqVTA8jqG1Q6c+UglTOD1xhC1BtjKI7XkCXRkZHrN5m18/XsnUp8Q89GkQO/z+0WjonSvl0FLhDYftp46nQ==}

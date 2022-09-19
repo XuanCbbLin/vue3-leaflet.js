@@ -1,15 +1,9 @@
 <template>
-  <!-- <Markercluster /> -->
-  <!-- <MarkerclusterOptions /> -->
-  <!-- <MarkerclusterEvent /> -->
-  <PolylineSnakeAnim />
+  <LeafletRoutingMachine />
 </template>
 
 <script setup>
-import Markercluster from "./docs/day21/Markercluster.vue";
-import MarkerclusterOptions from "./docs/day22/MarkerclusterOptions.vue";
-import MarkerclusterEvent from "./docs/day23/MarkerclusterEvent.vue";
-import PolylineSnakeAnim from "./docs/day24/Polyline-SnakeAnim.vue";
+import LeafletRoutingMachine from "./docs/day25/Leaflet-Routing-Machine.vue";
 </script>
 
 <style lang="scss"></style>
