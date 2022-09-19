@@ -11,13 +11,13 @@ https://www.796t.com/post/MWI3dmE=.html
 
 設定當點擊按鈕時能夠在地圖上畫矩形
 
-```javascript!
+```javascript
 <button @click="startDraw">畫圖</button>
 ```
 
 也是要將圖形資料加到地圖
 
-```javascript!
+```javascript
 onMounted(() => {
     const drawnItems = new L.FeatureGroup();
      map.addLayer(drawnItems);
@@ -26,22 +26,21 @@ onMounted(() => {
 
 設定矩形加到地圖上，並且使用 setOptions 將 showArea 設定 false
 
-```javascript!
+```javascript
 let drawRectangle = null;
 
-onMounted(()=>{
-    drawRectangle = new L.Draw.Rectangle(map);
+onMounted(() => {
+  drawRectangle = new L.Draw.Rectangle(map);
 
-    drawRectangle.setOptions({
-        showArea: false,
-      });
-})
-
+  drawRectangle.setOptions({
+    showArea: false,
+  });
+});
 ```
 
 點擊按鈕時設定 enable() 啟動繪畫
 
-```javascript!
+```javascript
 const startDraw = () => {
   drawRectangle.enable();
 };
@@ -49,7 +48,7 @@ const startDraw = () => {
 
 完整程式碼:
 
-```javascript!
+```javascript
 <template>
   <div class="h-[100vh]" ref="mapContent"></div>
   <button @click="startDraw">畫圖</button>
