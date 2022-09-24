@@ -1,6 +1,6 @@
 <template>
   <!-- <ExtendingLeafletLayers /> -->
-  <LGridLayerDOMElements />
+  <!-- <LGridLayerDOMElements /> -->
 </template>
 
 <script setup>
