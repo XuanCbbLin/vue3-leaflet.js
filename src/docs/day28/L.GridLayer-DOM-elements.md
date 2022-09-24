@@ -1,6 +1,6 @@
 ###### tags: `鐵人賽`
 
-# day28 L.GridLayer 和 DOM
+# day28 Extending L.GridLayer 和 DOM
 
 昨天介紹 L.TileLayer 建立圖層，今天要介紹另一種方式 L.GridLayer
 
