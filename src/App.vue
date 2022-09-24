@@ -1,9 +1,9 @@
 <template>
-  <LeafletRoutingMachine />
+  <ExtendingLeaflet />
 </template>
 
 <script setup>
-import LeafletRoutingMachine from "./docs/day25/Leaflet-Routing-Machine.vue";
+import ExtendingLeaflet from "./docs/day26/Extending-Leaflet.vue";
 </script>
 
 <style lang="scss"></style>
