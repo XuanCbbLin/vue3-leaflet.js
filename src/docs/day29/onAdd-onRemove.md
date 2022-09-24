@@ -21,6 +21,6 @@ L.CustomLayer = L.Layer.extend({
 
 ```
 
-## 參考資料 1231231231
+## 參考資料
 
 https://leafletjs.com/examples/extending/extending-2-layers.html
