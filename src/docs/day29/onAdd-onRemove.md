@@ -12,9 +12,9 @@
 
 ```javascript!
 L.CustomLayer = L.Layer.extend({
-    onAdd: function(map) {},
+    onAdd: function() {},
 
-    onRemove: function(map) {},
+    onRemove: function() {},
 
     _update: function() {}
 });
